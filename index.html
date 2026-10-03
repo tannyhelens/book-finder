@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Find books by title, author, or subject and build your personal reading list.">
+  <meta name="author" content="Tanny Santos">
+  <title>Book Finder | Discover Your Next Read</title>
+  <link rel="stylesheet" href="./styles/style.css">
+  <script type="module" src="./scripts/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header>
+    <h1>Book Finder</h1>
+    <p>Discover your next great read.</p>
+    <nav aria-label="Main navigation">
+      <a href="#search-section">Search Books</a>
+      <a href="#reading-list-section">My Reading List</a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section id="search-section" aria-labelledby="search-heading">
+      <h2 id="search-heading">Find a Book</h2>
+      <p>Find book information and save books to your reading list.
+        External links open information pages; full-text reading
+        is not guaranteed.</p>
+
+      <form id="search-form">
+        <label for="search-type">Search by</label>
+        <select id="search-type" name="search-type">
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+          <option value="subject">Subject</option>
+        </select>
+
+        <label for="search-input">Search terms</label>
+        <input
+          type="search"
+          id="search-input"
+          name="query"
+          placeholder="For example: The Hobbit"
+          maxlength="150"
+          required
+        >
+
+        <button type="submit">Search</button>
+      </form>
+
+      <p id="search-status" role="status" aria-live="polite"></p>
+
+      <div id="search-results" class="book-grid"></div>
+    </section>
+
+    <section id="reading-list-section" aria-labelledby="reading-list-heading">
+      <h2 id="reading-list-heading">My Reading List</h2>
+      <p id="reading-list-status" role="status" aria-live="polite">
+        Your reading list is empty. Search for a book to get started.
+      </p>
+      <div id="reading-list" class="book-grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; <span id="current-year">2026</span> Tanny Santos | Book Finder</p>
+    <p>Book data provided by Google Books and Open Library.</p>
+  </footer>
+</body>
+</html>

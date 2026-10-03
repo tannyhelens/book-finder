@@ -1,0 +1,217 @@
+/* Colors and general layout */
+:root {
+  --primary: #243b53;
+  --accent: #f0c674;
+  --background: #f5f7fa;
+  --surface: #ffffff;
+  --text: #243b53;
+  --border: #bcccdc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  background: var(--background);
+  color: var(--text);
+}
+
+header,
+footer {
+  padding: 2rem 1rem;
+  text-align: center;
+  background: var(--primary);
+  color: white;
+}
+
+h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 6vw, 3rem);
+}
+
+header p {
+  margin-top: 0.5rem;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+nav a {
+  padding: 0.5rem;
+  color: white;
+  text-underline-offset: 0.3rem;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+main {
+  width: min(1100px, 92%);
+  margin: 2rem auto;
+}
+
+section {
+  margin-bottom: 2rem;
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+h2 {
+  margin-top: 0;
+  font-family: Georgia, serif;
+}
+
+/* Search form */
+form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+}
+
+input,
+select {
+  background: white;
+  color: var(--text);
+}
+
+button {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+  background: #355675;
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+}
+
+:focus-visible {
+  outline: 3px solid #a85d00;
+  outline-offset: 4px;
+}
+
+/* Dynamically generated book cards */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 240px), 1fr)
+  );
+  gap: 1.5rem;
+}
+
+.book-card {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+  animation: fade-in 0.4s ease-out;
+}
+
+.book-card img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+}
+
+.book-card h3 {
+  font-size: 1.1rem;
+}
+
+.book-card a {
+  color: var(--primary);
+}
+
+/* Accessibility */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 10;
+  padding: 0.75rem;
+  background: white;
+  color: var(--primary);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Book card entrance animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Layout for larger screens */
+@media (min-width: 700px) {
+  form {
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+  }
+
+  form button {
+    grid-column: 2;
+  }
+}
+
+/* Respect the user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
