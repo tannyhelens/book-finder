@@ -23,16 +23,17 @@ export default class BookService {
       "https://www.googleapis.com/books/v1/volumes"
     );
 
-    const query = Object.entries(filters)
-      .map(([type, value]) => {
-        const cleanValue = value.replaceAll('"', " ");
-        return `${prefixes[type]}:"${cleanValue}"`;
-      })
-      .join(" ");
+   const query = Object.entries(filters)
+  .map(([type, value]) => {
+    const cleanValue = value.replaceAll('"', " ").trim();
+    return `${prefixes[type]}:${cleanValue}`;
+  })
+  .join(" ");
 
     url.searchParams.set("q", query);
     url.searchParams.set("maxResults", "12");
     url.searchParams.set("printType", "books");
+    url.searchParams.set("key", "AIzaSyBBtCcDELszI1hSAAzPQj5kr9stSk3wtjQ");
 
     const data = await this.fetchData(url);
 
@@ -71,12 +72,11 @@ export default class BookService {
     const data = await this.fetchData(url);
 
     return (data.docs || [])
-      .filter((item) => /^\/works\/OL\d+W$/.test(item.key))
+      .filter((item) => /^\/works\/OL\d+W$/.test(item.key || ""))
       .map((item) => ({
         id: `openlibrary-${item.key}`,
         title: item.title || "Untitled book",
-        authors:
-          (item.author_name || []).join(", ") || "Unknown author",
+        authors: (item.author_name || []).join(", ") || "Unknown author",
         published: String(item.first_publish_year || "Unknown"),
         description:
           "Visit Open Library for more information about this book.",
@@ -88,7 +88,7 @@ export default class BookService {
       }));
   }
 
-  async search(filters) {
+  async search(filters = {}) {
     const allowedFields = ["title", "author", "subject"];
 
     const searchTerms = Object.fromEntries(
