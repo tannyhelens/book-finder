@@ -1,0 +1,27 @@
+{
+  "name": "book-finder",
+  "version": "1.0.0",
+  "description": "A web application to search for books by title, author, or subject using Google Books and Open Library APIs, and save a personal reading list.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint scripts/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tannyhelens/book-finder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tannyhelens/book-finder/issues"
+  },
+  "homepage": "https://github.com/tannyhelens/book-finder#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0"
+  }
+}
