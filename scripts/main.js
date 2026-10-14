@@ -56,12 +56,21 @@ function createBookCard(book, isReadingList = false) {
     createText("p", `Source: ${book.source}`)
   );
 
-  const details = document.createElement("details");
-  details.append(
-    createText("summary", "Book description"),
-    createText("p", book.description)
-  );
-  card.append(details);
+ const details = document.createElement("details");
+
+details.addEventListener("toggle", () => {
+  const summary = details.querySelector("summary");
+
+  summary.textContent = details.open
+    ? "Hide book description"
+    : "Book description";
+});
+
+details.append(
+  createText("summary", "Book description"),
+  createText("p", book.description)
+);
+card.append(details);
 
   // Only create external links with a valid HTTPS address.
   try {
@@ -186,4 +195,36 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
+Object.values(searchFields).forEach((input) => {
+  input.addEventListener("input", () => {
+    if (
+      searchStatus.textContent ===
+      "Please enter a title, author, or subject."
+    ) {
+      searchStatus.textContent = "";
+    }
+  });
+});
+
+Object.values(searchFields).forEach((input) => {
+  input.addEventListener("input", () => {
+    if (
+      searchStatus.textContent ===
+      "Please enter a title, author, or subject."
+    ) {
+      searchStatus.textContent = "";
+    }
+  });
+});
+
+Object.values(searchFields).forEach((input) => {
+  input.addEventListener("input", () => {
+    if (
+      searchStatus.textContent ===
+      "Please enter a title, author, or subject."
+    ) {
+      searchStatus.textContent = "";
+    }
+  });
+});
 renderReadingList();

@@ -262,3 +262,30 @@ form button:disabled {
     transition: none !important;
   }
 }
+
+/* Search field feedback */
+input {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgb(36 59 83 / 15%);
+}
+
+/* Book card feedback */
+.book-card {
+  transition: box-shadow 0.2s;
+}
+
+.book-card:hover,
+.book-card:focus-within {
+  box-shadow: 0 6px 18px rgb(36 59 83 / 15%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  input,
+  .book-card {
+    transition: none;
+  }
+}
