@@ -1,4 +1,4 @@
-// Retrieve book data from two external APIs.
+// Retrieve book information from Google Books and Open Library.
 export default class BookService {
   async fetchData(url) {
     const response = await fetch(url, {
@@ -12,7 +12,7 @@ export default class BookService {
     return response.json();
   }
 
-  async searchGoogle(query, type) {
+  async searchGoogle(filters) {
     const prefixes = {
       title: "intitle",
       author: "inauthor",
@@ -23,10 +23,16 @@ export default class BookService {
       "https://www.googleapis.com/books/v1/volumes"
     );
 
-    url.searchParams.set("q", `${prefixes[type]}:${query}`);
+    const query = Object.entries(filters)
+      .map(([type, value]) => {
+        const cleanValue = value.replaceAll('"', " ");
+        return `${prefixes[type]}:"${cleanValue}"`;
+      })
+      .join(" ");
+
+    url.searchParams.set("q", query);
     url.searchParams.set("maxResults", "12");
     url.searchParams.set("printType", "books");
-    url.searchParams.set("key", "AIzaSyBBtCcDELszI1hSAAzPQj5kr9stSk3wtjQ");
 
     const data = await this.fetchData(url);
 
@@ -49,10 +55,13 @@ export default class BookService {
     });
   }
 
-  async searchOpenLibrary(query, type) {
+  async searchOpenLibrary(filters) {
     const url = new URL("https://openlibrary.org/search.json");
 
-    url.searchParams.set(type, query);
+    Object.entries(filters).forEach(([type, value]) => {
+      url.searchParams.set(type, value);
+    });
+
     url.searchParams.set("limit", "12");
     url.searchParams.set(
       "fields",
@@ -79,21 +88,28 @@ export default class BookService {
       }));
   }
 
-  async search(query, type = "title") {
-    const searchTerms = query.trim();
+  async search(filters) {
+    const allowedFields = ["title", "author", "subject"];
 
-    if (!searchTerms) {
+    const searchTerms = Object.fromEntries(
+      Object.entries(filters)
+        .filter(
+          ([type, value]) =>
+            allowedFields.includes(type) &&
+            typeof value === "string" &&
+            value.trim()
+        )
+        .map(([type, value]) => [type, value.trim()])
+    );
+
+    if (!Object.keys(searchTerms).length) {
       throw new Error("Please enter a title, author, or subject.");
-    }
-
-    if (!["title", "author", "subject"].includes(type)) {
-      throw new Error("Please select a valid search type.");
     }
 
     // Keep available results if one provider fails.
     const results = await Promise.allSettled([
-      this.searchGoogle(searchTerms, type),
-      this.searchOpenLibrary(searchTerms, type),
+      this.searchGoogle(searchTerms),
+      this.searchOpenLibrary(searchTerms),
     ]);
 
     if (results.every((result) => result.status === "rejected")) {

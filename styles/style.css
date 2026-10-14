@@ -84,12 +84,15 @@ form {
   gap: 0.75rem;
 }
 
+form > p {
+  margin-top: 0;
+}
+
 label {
   font-weight: bold;
 }
 
 input,
-select,
 button {
   width: 100%;
   min-height: 48px;
@@ -99,8 +102,8 @@ button {
   font: inherit;
 }
 
-input,
-select {
+input {
+  min-width: 0;
   background: white;
   color: var(--text);
 }
@@ -113,20 +116,29 @@ button {
   transition: background-color 0.2s, transform 0.2s;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   background: #355675;
   transform: translateY(-2px);
 }
 
 button:disabled {
   opacity: 0.7;
-  cursor: wait;
+  cursor: default;
   transform: none;
+}
+
+form button:disabled {
+  cursor: wait;
 }
 
 :focus-visible {
   outline: 3px solid #a85d00;
   outline-offset: 4px;
+}
+
+#search-status,
+#reading-list-status {
+  margin: 1rem 0;
 }
 
 /* Dynamically generated book cards */
@@ -140,6 +152,10 @@ button:disabled {
 }
 
 .book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
   padding: 1rem;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -155,11 +171,38 @@ button:disabled {
 }
 
 .book-card h3 {
+  margin: 0;
   font-size: 1.1rem;
+}
+
+.book-card p {
+  margin: 0;
 }
 
 .book-card a {
   color: var(--primary);
+  text-underline-offset: 0.2rem;
+}
+
+.book-card a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.book-card button {
+  margin-top: auto;
+}
+
+.book-card details {
+  padding: 0.5rem 0;
+}
+
+.book-card summary {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.book-card details p {
+  margin-top: 0.75rem;
 }
 
 /* Accessibility */
@@ -195,6 +238,10 @@ button:disabled {
   form {
     grid-template-columns: 180px 1fr;
     align-items: center;
+  }
+
+  form > p {
+    grid-column: 1 / -1;
   }
 
   form button {

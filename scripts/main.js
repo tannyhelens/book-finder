@@ -5,8 +5,13 @@ const readingList = new ReadingList();
 const bookService = new BookService();
 
 const form = document.querySelector("#search-form");
-const searchInput = document.querySelector("#search-input");
-const searchType = document.querySelector("#search-type");
+
+const searchFields = {
+  title: document.querySelector("#title-input"),
+  author: document.querySelector("#author-input"),
+  subject: document.querySelector("#subject-input"),
+};
+
 const searchButton = form.querySelector("button");
 const searchStatus = document.querySelector("#search-status");
 const searchResults = document.querySelector("#search-results");
@@ -18,7 +23,7 @@ let currentResults = [];
 document.querySelector("#current-year").textContent =
   new Date().getFullYear();
 
-// Use textContent to safely display information from the APIs.
+// Display API information safely using textContent.
 function createText(tag, text) {
   const element = document.createElement(tag);
   element.textContent = text;
@@ -58,15 +63,16 @@ function createBookCard(book, isReadingList = false) {
   );
   card.append(details);
 
-  // Only create links with a valid HTTPS address.
+  // Only create external links with a valid HTTPS address.
   try {
     const url = new URL(book.link);
 
     if (url.protocol === "https:") {
       const link = createText(
-  "a",
-  `View book information on ${book.source}`
-); 
+        "a",
+        `View book information on ${book.source}`
+      );
+
       link.href = url.href;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
@@ -134,11 +140,17 @@ function renderReadingList() {
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const query = searchInput.value.trim();
+  const filters = Object.fromEntries(
+    Object.entries(searchFields).map(([name, input]) => [
+      name,
+      input.value.trim(),
+    ])
+  );
 
-  if (!query) {
-    searchStatus.textContent = "Please enter search terms.";
-    searchInput.focus();
+  if (!Object.values(filters).some(Boolean)) {
+    searchStatus.textContent =
+      "Please enter a title, author, or subject.";
+    searchFields.title.focus();
     return;
   }
 
@@ -146,11 +158,13 @@ form.addEventListener("submit", async (event) => {
   searchButton.textContent = "Searching...";
   searchResults.setAttribute("aria-busy", "true");
   searchStatus.textContent = "Searching for books...";
+
   currentResults = [];
   renderSearchResults();
 
   try {
-    const result = await bookService.search(query, searchType.value);
+    const result = await bookService.search(filters);
+
     currentResults = result.books;
     renderSearchResults();
 

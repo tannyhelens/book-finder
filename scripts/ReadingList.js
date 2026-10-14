@@ -18,8 +18,10 @@ export default class ReadingList {
   }
 
   save() {
-    // Storage errors are handled by the calling code.
-    localStorage.setItem(this.storageKey, JSON.stringify(this.books));
+    localStorage.setItem(
+      this.storageKey,
+      JSON.stringify(this.books)
+    );
   }
 
   hasBook(id) {
@@ -46,7 +48,10 @@ export default class ReadingList {
 
   removeBook(id) {
     const previousBooks = this.books;
-    this.books = this.books.filter((book) => book.id !== id);
+
+    this.books = this.books.filter(
+      (book) => book.id !== id
+    );
 
     try {
       this.save();
